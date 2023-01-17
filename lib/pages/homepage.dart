@@ -12,25 +12,47 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   ScrollController scrollScontrol = ScrollController();
   TextEditingController searchController = TextEditingController();
-  int categoryIsSelected = 0;
+  int categoryIsSelected = 1;
+
+  List itemsOnHomePage = [
+    Container(
+      width: 200,
+      height: 300,
+      color: Colors.blue,
+    ),
+    Container(
+      width: 200,
+      height: 300,
+      color: Colors.blue,
+    ),
+    Container(
+      width: 200,
+      height: 300,
+      color: Colors.blue,
+    ),
+    Container(
+      width: 200,
+      height: 300,
+      color: Colors.blue,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
     var screenDimentions = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          controller: scrollScontrol,
-          child: Stack(
-            children: [
-              Container(
-                width: screenDimentions.width,
-                height: screenDimentions.height,
-                decoration: const BoxDecoration(
-                  color: Color.fromARGB(158, 220, 214, 214),
-                ),
+        child: Stack(
+          children: [
+            Container(
+              width: screenDimentions.width,
+              height: screenDimentions.height,
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(158, 220, 214, 214),
               ),
-              Column(
+            ),
+            SingleChildScrollView(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Best Fortune"),
@@ -83,46 +105,131 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: Colors.purple[900],
-                          borderRadius: BorderRadius.circular(12),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            categoryIsSelected = 0;
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: categoryIsSelected == 0
+                                ? Colors.purple[900]
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'All',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: categoryIsSelected == 0
+                                    ? Colors.white
+                                    : Color.fromARGB(190, 99, 91, 150)),
+                          ),
                         ),
-                        child: Text(
-                          'All',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: categoryIsSelected == 0
-                                  ? Colors.white
-                                  : Color.fromARGB(190, 99, 91, 150)),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            categoryIsSelected = 1;
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: categoryIsSelected == 1
+                                ? Colors.purple[900]
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'Phone',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: categoryIsSelected == 1
+                                    ? Colors.white
+                                    : Color.fromARGB(190, 99, 91, 150)),
+                          ),
                         ),
-                      )
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            categoryIsSelected = 2;
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: categoryIsSelected == 2
+                                ? Colors.purple[900]
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'Laptop',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: categoryIsSelected == 2
+                                    ? Colors.white
+                                    : Color.fromARGB(190, 99, 91, 150)),
+                          ),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            categoryIsSelected = 3;
+                          });
+                        },
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: categoryIsSelected == 3
+                                ? Colors.purple[900]
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            'Camera',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: categoryIsSelected == 3
+                                    ? Colors.white
+                                    : Color.fromARGB(190, 99, 91, 150)),
+                          ),
+                        ),
+                      ),
                     ],
+                  ),
+                  SizedBox(
+                    width: screenDimentions.width,
+                    height: 400,
+                    child: ListView.builder(
+                      itemCount: itemsOnHomePage.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: itemsOnHomePage[index],
+                        );
+                      },
+                    ),
                   ),
                 ],
               ),
-              Container(
-                height: screenDimentions.height,
-                child: Column(
-                  children: [
-                    const Spacer(),
-                    Container(
-                      alignment: Alignment.bottomCenter,
-                      width: screenDimentions.width,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: Colors.yellow[200],
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
