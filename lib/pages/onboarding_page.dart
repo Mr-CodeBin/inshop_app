@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inshop_app/Authentication/Loginpage.dart';
 import 'package:inshop_app/button.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/pages/intro_page.dart';
@@ -85,9 +86,8 @@ class OnBoardingPage extends StatelessWidget {
     );
   }
 
-  void goToHome(context) => Navigator.of(context).pushReplacement(
-        CustomPageRoute(HomePage())
-      );
+  void goToHome(context) =>
+      Navigator.of(context).pushReplacement(CustomPageRoute(LoginPageScreen()));
 
   Widget buildImage(String path) => Center(
           child: Container(

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inshop_app/pages/subPages/homepage.dart';
+import 'package:inshop_app/utils/pageRout.dart';
 import 'package:lottie/lottie.dart';
 
 class OTPpage extends StatefulWidget {
@@ -22,7 +24,18 @@ class _OTPpageState extends State<OTPpage> {
                 "https://assets6.lottiefiles.com/packages/lf20_fkdiqhnw.json",
               ),
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(10, 8, 20, 0),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  "Verification Code",
+                  style: GoogleFonts.saira(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                 child: Text(
                   textAlign: TextAlign.center,
                   "We have sent OTP on your Mobile Number ***********",
@@ -121,20 +134,29 @@ class _OTPpageState extends State<OTPpage> {
               SizedBox(
                 height: 10,
               ),
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.symmetric(horizontal: 120),
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    "Submit",
-                    style: GoogleFonts.saira(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushReplacement(
+                    CustomPageRoute(
+                      const HomePage(),
+                    ),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  margin: EdgeInsets.symmetric(horizontal: 120),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Center(
+                    child: Text(
+                      "Submit",
+                      style: GoogleFonts.saira(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
