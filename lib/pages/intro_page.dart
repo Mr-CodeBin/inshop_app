@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/pages/onboarding_page.dart';
-import 'homepage.dart';
+import 'subPages/homepage.dart';
 
 class IntroPage extends StatelessWidget {
   const IntroPage({super.key});

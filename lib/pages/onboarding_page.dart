@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/button.dart';
-import 'package:inshop_app/pages/homepage.dart';
+import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/pages/intro_page.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 import 'package:introduction_screen/introduction_screen.dart';
