@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/button.dart';
 import 'package:inshop_app/pages/homepage.dart';
 import 'package:inshop_app/pages/intro_page.dart';
+import 'package:inshop_app/utils/pageRout.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 class OnBoardingPage extends StatelessWidget {
@@ -85,7 +86,7 @@ class OnBoardingPage extends StatelessWidget {
   }
 
   void goToHome(context) => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => HomePage()),
+        CustomPageRoute(HomePage())
       );
 
   Widget buildImage(String path) => Center(
