@@ -1,6 +1,6 @@
 # inshop_app
 
-A new Flutter project.
+A new Flutter project for tracking price of your favourite Online products.
 
 ## Getting Started
 
