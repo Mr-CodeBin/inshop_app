@@ -15,26 +15,7 @@ class _HomePageState extends State<HomePage> {
   int categoryIsSelected = 1;
 
   List itemsOnHomePage = [
-    Container(
-      width: 200,
-      height: 300,
-      color: Colors.blue,
-    ),
-    Container(
-      width: 200,
-      height: 300,
-      color: Colors.blue,
-    ),
-    Container(
-      width: 200,
-      height: 300,
-      color: Colors.blue,
-    ),
-    Container(
-      width: 200,
-      height: 300,
-      color: Colors.blue,
-    ),
+    ItemCard(),
   ];
 
   @override
@@ -55,8 +36,35 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text("Best Fortune"),
-                  const Text("Perfect prise"),
+                  SizedBox(
+                    height: screenDimentions.height * (18 / 428),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 32),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Best Fortune",
+                          style: TextStyle(
+                            color: Colors.purple[900],
+                            fontWeight: FontWeight.bold,
+                            fontSize: 28,
+                          ),
+                        ),
+                        Text(
+                          "Perfect prise",
+                          style: TextStyle(
+                            color: Colors.purple[900],
+                            fontSize: 20,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: screenDimentions.height * (8 / 428),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -67,24 +75,26 @@ class _HomePageState extends State<HomePage> {
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: TextField(
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: const Icon(
-                              Icons.search_rounded,
-                              size: 28,
-                              color: Color.fromARGB(208, 0, 0, 0),
+                        child: Center(
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              prefixIcon: Icon(
+                                Icons.search_rounded,
+                                size: 28,
+                                color: Color.fromARGB(208, 0, 0, 0),
+                              ),
+                              hintText: "Search",
+                              hintStyle: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                            hintText: "Search",
-                            hintStyle: TextStyle(
-                              fontSize: 16,
-                              color: Colors.grey,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            // autocorrect: true,
+                            enableSuggestions: true,
+                            controller: searchController,
                           ),
-                          // autocorrect: true,
-                          enableSuggestions: true,
-                          controller: searchController,
                         ),
                       ),
                       SizedBox(
@@ -103,6 +113,9 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(
+                    height: screenDimentions.height * (4 / 428),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -214,14 +227,18 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   SizedBox(
+                    height: screenDimentions.height * (4 / 428),
+                  ),
+                  SizedBox(
                     width: screenDimentions.width,
-                    height: 400,
+                    height: screenDimentions.height * (760 / 926),
                     child: ListView.builder(
-                      itemCount: itemsOnHomePage.length,
+                      itemCount: 12,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: itemsOnHomePage[index],
+                          padding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 28),
+                          child: itemsOnHomePage[0],
                         );
                       },
                     ),
@@ -229,8 +246,163 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            Column(
+              children: [
+                Spacer(),
+                AnimatedContainer(
+                  height: 52,
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Row(children: [
+                    
+                  ]),
+                  duration: Duration(milliseconds: 800),
+                )
+              ],
+            ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ItemCard extends StatefulWidget {
+  const ItemCard({super.key});
+
+  @override
+  State<ItemCard> createState() => _ItemCardState();
+}
+
+class _ItemCardState extends State<ItemCard> {
+  @override
+  Widget build(BuildContext context) {
+    var screenDimentions = MediaQuery.of(context).size;
+    return Container(
+      width: screenDimentions.width,
+      height: 184,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(36),
+        boxShadow: [
+          BoxShadow(
+            color: Color.fromARGB(59, 158, 158, 158),
+            blurRadius: 0.5,
+          )
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(36),
+              ),
+              child: Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(36),
+                    child: Image.asset("images/benefit2.png"),
+                  ),
+                  Column(
+                    children: [
+                      SizedBox(
+                        height: screenDimentions.height * (8 / 926),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: screenDimentions.width * (8 / 428)),
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: Colors.white),
+                          child: Lottie.network(
+                              "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
+                              width: 32,
+                              animate: false),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            width: screenDimentions.width * (8 / 428),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Spacer(),
+              Text(
+                "Product Name",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: screenDimentions.width * (18 / 428),
+                ),
+              ),
+              Text(
+                "by Seto",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: screenDimentions.width * (12 / 428),
+                  color: Colors.grey,
+                ),
+              ),
+              Spacer(),
+              Text(
+                "short discription of product",
+                style: TextStyle(
+                  // fontWeight: FontWeight.bold,
+                  fontSize: screenDimentions.width * (12 / 428),
+                  color: Colors.grey,
+                ),
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 4,
+                  ),
+                  Text(
+                    "₹800.43",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenDimentions.width * (18 / 428),
+                      color: Colors.black,
+                    ),
+                  ),
+                  SizedBox(
+                    width: screenDimentions.width * (16 / 428),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.purple[900],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      "Buy",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenDimentions.width * (18 / 428),
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+            ],
+          )
+        ],
       ),
     );
   }
