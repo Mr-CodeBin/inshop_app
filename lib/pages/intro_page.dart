@@ -8,7 +8,7 @@ class IntroPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenDimenstions = MediaQuery.of(context).size;
+    // var screenDimenstions = MediaQuery.of(context).size;
 
     // to check the height and width of the emulator device
     // ,\n${screenDimenstions.height}\n${screenDimenstions.width}
@@ -47,7 +47,7 @@ class IntroPage extends StatelessWidget {
           ),
 
           //fills gave btw widgets
-          SizedBox(
+          const SizedBox(
             height: 8,
           ),
 
@@ -63,12 +63,12 @@ class IntroPage extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.lightBlueAccent.withOpacity(0.8),
                   borderRadius: BorderRadius.circular(40)),
-              margin: EdgeInsets.fromLTRB(150, 0, 150, 0),
-              padding: EdgeInsets.all(12),
+              margin: const EdgeInsets.fromLTRB(150, 0, 150, 0),
+              padding: const EdgeInsets.all(12),
               child: Text(
                 "Get Started",
                 style: GoogleFonts.saira(
-                    color: Color.fromARGB(255, 255, 252, 252),
+                    color: const Color.fromARGB(255, 255, 252, 252),
                     fontSize: 12,
                     fontWeight: FontWeight.w600),
               ),

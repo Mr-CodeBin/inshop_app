@@ -14,25 +14,40 @@ class OnBoardingPage extends StatelessWidget {
       child: IntroductionScreen(
         pages: [
           PageViewModel(
-            title: "Benefit-1",
+            title: "Best prices",
             body: "Helps with finding cheap prices",
-            image: buildImage("images/inshopp_logo.png"),
+            image: buildImage("images/benefit1.png"),
             decoration: getPageDecoration(),
           ),
           PageViewModel(
-            title: "Benefit-2",
-            body: "2 Helps with finding cheap prices",
+            title: "Notifications",
+            body:
+                "Notify if you are interested in a particular product and price goes down or available in a particular range.",
             image: buildImage(
-              "images/inshopp_logo.png",
+              "images/benefit2.png",
             ),
             decoration: getPageDecoration(),
           ),
           PageViewModel(
-            title: "Benefit-3",
-            body: "3 Helps with finding cheap prices",
-            footer: Row(
+            title: "Handy-Dandy",
+            // body: "3 Helps with finding cheap prices",
+            bodyWidget: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Very easy to narrow down based on your requirements",
+                  style: GoogleFonts.saira(
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 40,
+                ),
                 ElevatedButton(
                   style: buttonPrimary,
                   onPressed: () => goToHome(context),
@@ -40,14 +55,14 @@ class OnBoardingPage extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(15, 7, 15, 7),
                     child: Text(
                       "Finish",
-                      style: GoogleFonts.saira(fontSize: 15),
+                      style: GoogleFonts.saira(fontSize: 18),
                     ),
                   ),
                 ),
               ],
             ),
-            image: buildImage("images/inshopp_logo.png"),
-            decoration: getPageDecoration2(),
+            image: buildImage("images/benefit3.png"),
+            decoration: getPageDecoration(),
           ),
         ],
         // done: ElevatedButton(
@@ -90,7 +105,7 @@ class OnBoardingPage extends StatelessWidget {
         titlePadding: EdgeInsets.all(0),
         bodyTextStyle: GoogleFonts.saira(fontSize: 20),
         bodyPadding: EdgeInsets.all(0).copyWith(bottom: 0),
-        imagePadding: EdgeInsets.all(100),
+        imagePadding: EdgeInsets.all(10),
         pageColor: Color.fromARGB(255, 255, 255, 255),
       );
 
@@ -103,7 +118,7 @@ class OnBoardingPage extends StatelessWidget {
         titlePadding: EdgeInsets.all(0),
         bodyTextStyle: GoogleFonts.saira(fontSize: 20),
         bodyPadding: EdgeInsets.all(0).copyWith(bottom: 0),
-        imagePadding: EdgeInsets.all(40),
+        imagePadding: EdgeInsets.all(10),
         pageColor: Color.fromARGB(255, 255, 255, 255),
       );
 }
