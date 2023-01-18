@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/BlankPage.dart';
@@ -6,12 +7,32 @@ import 'package:lottie/lottie.dart';
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
-
+  static String verify = "";
   @override
   State<LoginPageScreen> createState() => _LoginPageScreenState();
 }
 
 class _LoginPageScreenState extends State<LoginPageScreen> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  TextEditingController phoneNumbeControllerr = TextEditingController();
+
+  sendOtp() async {
+    await FirebaseAuth.instance.verifyPhoneNumber(
+      phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",
+      verificationCompleted: (PhoneAuthCredential credential) {},
+      verificationFailed: (FirebaseAuthException e) {},
+      codeSent: (String verificationId, int? resendToken) {
+        LoginPageScreen.verify = verificationId;
+        Navigator.pushReplacement(context, MaterialPageRoute(
+          builder: (context) {
+            return OTPpage();
+          },
+        ));
+      },
+      codeAutoRetrievalTimeout: (String verificationId) {},
+    );
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
@@ -38,13 +59,14 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
                 child: TextField(
-                  controller: null,
+                  controller: phoneNumbeControllerr,
                   obscureText: false,
+                  maxLength: 10,
                   decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
+                    enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
                     ),
-                    focusedBorder: OutlineInputBorder(
+                    focusedBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                     fillColor: Colors.grey.shade200,
@@ -98,12 +120,9 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
               //sign in button
 
               GestureDetector(
-                onTap: () =>
-                    Navigator.pushReplacement(context, MaterialPageRoute(
-                  builder: (context) {
-                    return OTPpage();
-                  },
-                )),
+                onTap: () async {
+                  await sendOtp();
+                },
                 child: Container(
                   padding: EdgeInsets.all(10),
                   margin: EdgeInsets.symmetric(horizontal: 120),

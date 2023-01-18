@@ -1,8 +1,15 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inshop_app/Authentication/Loginpage.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
+import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
 class OTPpage extends StatefulWidget {
@@ -13,6 +20,22 @@ class OTPpage extends StatefulWidget {
 }
 
 class _OTPpageState extends State<OTPpage> {
+  String code = "";
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  verifyOTP(BuildContext context) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: LoginPageScreen.verify, smsCode: code);
+
+      // Sign the user in (or link) with the credential
+      await auth.signInWithCredential(credential);
+      Navigator.of(context).push(CustomPageRoute(const HomePage()));
+    } catch (e) {
+      log(e.toString());
+      showSnackBar("Incorrect OTP", context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,92 +67,18 @@ class _OTPpageState extends State<OTPpage> {
                   ),
                 ),
               ),
-              Form(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    SizedBox(
-                      height: 68,
-                      width: 64,
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value.length == 1) {
-                            FocusScope.of(context).nextFocus();
-                          }
-                        },
-                        onSaved: (pin1) {},
-                        decoration: InputDecoration(hintText: "_"),
-                        style: Theme.of(context).textTheme.headline6,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 68,
-                      width: 64,
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value.length == 1) {
-                            FocusScope.of(context).nextFocus();
-                          }
-                        },
-                        onSaved: (pin2) {},
-                        decoration: InputDecoration(hintText: "_"),
-                        style: Theme.of(context).textTheme.headline6,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 68,
-                      width: 64,
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value.length == 1) {
-                            FocusScope.of(context).nextFocus();
-                          }
-                        },
-                        onSaved: (pin3) {},
-                        decoration: InputDecoration(hintText: "_"),
-                        style: Theme.of(context).textTheme.headline6,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 68,
-                      width: 64,
-                      child: TextFormField(
-                        onChanged: (value) {
-                          if (value.length == 1) {
-                            FocusScope.of(context).nextFocus();
-                          }
-                        },
-                        onSaved: (pin4) {},
-                        decoration: InputDecoration(hintText: "_"),
-                        style: Theme.of(context).textTheme.headline6,
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(1),
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              OtpTextField(
+                numberOfFields: 6,
+                borderColor: Color(0xFF512DA8),
+                //set to true to show as box or false to show as dash
+                showFieldAsBox: true,
+                //runs when a code is typed in
+                onCodeChanged: (String value) {
+                  code = value;
+                },
+
+                //runs when every textfield is filled
+                onSubmit: (String verificationCode) {}, // end onSubmit
               ),
               SizedBox(
                 height: 10,

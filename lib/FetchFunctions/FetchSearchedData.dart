@@ -22,7 +22,6 @@ Future<Map<String, dynamic>> GetSearchData(String productName) async {
     jsonResponse["isSuccess"] = true;
     return jsonResponse;
   } else {
-   
-    return {"isSuccess":false,"data":[]};
+    return {"isSuccess": false, "data": []};
   }
 }

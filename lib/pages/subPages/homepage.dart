@@ -6,6 +6,7 @@ import 'package:inshop_app/FetchFunctions/FetchSearchedData.dart';
 import 'package:inshop_app/pages/subPages/cartPage.dart';
 import 'package:inshop_app/pages/subPages/favPage.dart';
 import 'package:inshop_app/pages/subPages/profilePage.dart';
+import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
@@ -6050,23 +6051,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  void showSnackBar(String labelText, BuildContext context,
-      {Color color = const Color.fromARGB(255, 226, 110, 116)}) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        duration: const Duration(seconds: 6),
-        action: SnackBarAction(
-          textColor: Colors.white,
-          label: "Dismiss",
-          onPressed: () {},
-        ),
-        backgroundColor: color,
-        content: Text(
-          labelText,
-        ),
-      ),
-    );
-  }
+  
 
   Future getSearchResult() async {
     if (searchController.text.trim().isEmpty) {
