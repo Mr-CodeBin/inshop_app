@@ -45,6 +45,15 @@ dev_dependencies:
   introduction_screen: ^3.1.4
   flutter_svg: ^1.1.6
 
+  #text resizer
+  auto_size_text: ^3.0.0
+
+  #page sliding widget
+  carousel_slider: ^4.2.1
+  
+  #smooth sliding dot widget
+  smooth_page_indicator: ^1.0.0+2
+
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
