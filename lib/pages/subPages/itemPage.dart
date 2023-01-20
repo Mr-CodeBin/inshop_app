@@ -56,7 +56,6 @@ class _itemPageState extends State<itemPage> {
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                     ),
-
                     child: Stack(
                       children: [
                         // Image.network(
@@ -127,18 +126,102 @@ class _itemPageState extends State<itemPage> {
                     ),
                   ),
                 ),
+                // grey container
                 Container(
+                  // margin: EdgeInsets.only(top: size.height * 0.4),
+                  padding: EdgeInsets.only(
+                    top: size.height * 0.032,
+                    left: size.width * 0.05,
+                    right: size.width * 0.05,
+                    // bottom: size.height * 0.005,
+                  ),
+                  // height: size.height * 0.6,
                   width: size.width,
-                  color: Colors.grey,
-                  child: Expanded(child: Column(
+                  decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(18),
+                      topRight: Radius.circular(18),
+                    ),
+                  ),
+                  child: Column(
                     children: [
-                      Text("Dopo avere accerchiato e distrutto un'intera armata austriaca durante la campagna di Ulma, le forze francesi occuparono Vienna l'11 novembre 1805. Gli austria"*100),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "iPhone 13 pro Max",
+                                style: GoogleFonts.saira(
+                                  color: Colors.black,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              Text(
+                                "By Amazon",
+                                style: GoogleFonts.saira(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                        // indent: 6,
+                        // endIndent: 20,
+                      ),
+                      // my description container
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "Description:",
+                          style: GoogleFonts.saira(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      //main description container
+                      Container(
+                        alignment: Alignment.topLeft,
+                        child: AutoSizeText(
+                          '''15 cm (6.1-inch) Super Retina XDR display with ProMotion for a faster,\nmore responsive feel\nCinematic mode adds shallow depth of field and shifts focus automatically in your videos\nPro camera system with new 12MP Telephoto, Wide and Ultra Wide cameras;\nLiDAR Scanner; 6x optical zoom range; macro photography; Photographic Styles,\nProRes video, Smart HDR 4, Night mode, Apple ProRAW, 4K Dolby Vision HDR recording\n12MP TrueDepth front camera with Night mode, 4K Dolby Vision HDR recording\nA15 Bionic chip for lightning-fast performance\n''' *
+                              10,
+                          minFontSize: 12,
+                          maxLines: 100,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.saira(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.justify,
+                        ),
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                        // indent: 6,
+                        // endIndent: 20,
+                      ),
+                      SizedBox(
+                        height: 56,
+                      )
                     ],
-                  )),
-                )
+                  ),
+                ),
               ],
             ),
           ),
+          //bottom navigation buttons
           Align(
             alignment: Alignment(0, 0.964),
             child: Padding(
