@@ -16,6 +16,7 @@ void main() async {
   log(lg.toString());
   // bool checkState;
   runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
     home: lg != null ? HomePage() : IntroPage(),
   ));
 }

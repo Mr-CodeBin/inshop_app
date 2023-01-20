@@ -5,6 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/button.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:inshop_app/pages/subPages/homepage.dart';
+import 'package:inshop_app/utils/pageRout.dart';
+import 'package:inshop_app/utils/snackBar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class itemPage extends StatefulWidget {
@@ -33,11 +36,25 @@ class _itemPageState extends State<itemPage> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        backgroundColor: Colors.blueAccent,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: Colors.black,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20)),
+            gradient: LinearGradient(
+                colors: [Colors.red, Colors.pink],
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter),
+          ),
+        ),
+        leading: GestureDetector(
+          onTap: () => Navigator.of(context).push(CustomPageRoute(HomePage())),
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.black,
+          ),
         ),
       ),
       body: Stack(
