@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/BlankPage.dart';
 import 'package:inshop_app/Authentication/Opage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
+import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPageScreen extends StatefulWidget {
@@ -19,6 +20,10 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   TextEditingController phoneNumbeControllerr = TextEditingController();
 
   sendOtp(BuildContext context) async {
+    if (phoneNumbeControllerr.text.trim().isEmpty) {
+      showSnackBar("Chutiya ho kya?", context);
+      return;
+    }
     LoginPageScreen.phone = "+91${phoneNumbeControllerr.text.trim()}";
     await FirebaseAuth.instance.verifyPhoneNumber(
       // phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",

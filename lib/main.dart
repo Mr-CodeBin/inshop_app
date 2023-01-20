@@ -16,6 +16,6 @@ void main() async {
   log(lg.toString());
   // bool checkState;
   runApp(MaterialApp(
-    home: lg != null ? HomePage() : OnBoardingPage(),
+    home: lg != null ? HomePage() : IntroPage(),
   ));
 }
