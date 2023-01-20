@@ -1,26 +1,21 @@
+import 'dart:developer';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:inshop_app/FetchFunctions/saveState.dart';
 import 'package:inshop_app/pages/intro_page.dart';
 import 'package:inshop_app/pages/onboarding_page.dart';
+import 'package:inshop_app/pages/subPages/homepage.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: IntroPage(),
-    );
-  }
+  var lg = await LoginState().loadLogin();
+  log(lg.toString());
+  // bool checkState;
+  runApp(MaterialApp(
+    home: lg != null ? HomePage() : OnBoardingPage(),
+  ));
 }

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/BlankPage.dart';
 import 'package:inshop_app/Authentication/Opage.dart';
+import 'package:inshop_app/utils/pageRout.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
   static String verify = "";
+  static String phone = "";
   @override
   State<LoginPageScreen> createState() => _LoginPageScreenState();
 }
@@ -16,18 +18,16 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController phoneNumbeControllerr = TextEditingController();
 
-  sendOtp() async {
+  sendOtp(BuildContext context) async {
+    LoginPageScreen.phone = "+91${phoneNumbeControllerr.text.trim()}";
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",
+      // phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",
+      phoneNumber: "+911111111111",
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
         LoginPageScreen.verify = verificationId;
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) {
-            return OTPpage();
-          },
-        ));
+        Navigator.of(context).push(CustomPageRoute(OTPpage()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -121,7 +121,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
               GestureDetector(
                 onTap: () async {
-                  await sendOtp();
+                  await sendOtp(context);
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),

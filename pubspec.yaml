@@ -43,6 +43,7 @@ dependencies:
   get: ^4.6.5
   cloud_firestore: ^4.3.1
   flutter_otp_text_field: ^1.1.0+2
+  shared_preferences: ^2.0.16
 
 dev_dependencies:
   flutter_test:

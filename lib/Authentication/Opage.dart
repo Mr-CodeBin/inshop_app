@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/Loginpage.dart';
+import 'package:inshop_app/FetchFunctions/saveState.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
@@ -24,11 +25,14 @@ class _OTPpageState extends State<OTPpage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   verifyOTP(BuildContext context) async {
     try {
+      log("${LoginPageScreen.verify}  ${code}");
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: LoginPageScreen.verify, smsCode: code);
-
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
+      LoginState loginstate = LoginState(phoneNo: LoginPageScreen.phone);
+      log( await loginstate.saveLogin()? "Done":"Exception");
+
       Navigator.of(context).push(CustomPageRoute(const HomePage()));
     } catch (e) {
       log(e.toString());
@@ -73,9 +77,11 @@ class _OTPpageState extends State<OTPpage> {
                 //set to true to show as box or false to show as dash
                 showFieldAsBox: true,
                 //runs when a code is typed in
+                
                 onCodeChanged: (String value) {
-                  code = value;
+                  code += value;
                 },
+                clearText: true,
 
                 //runs when every textfield is filled
                 onSubmit: (String verificationCode) {}, // end onSubmit
@@ -85,11 +91,7 @@ class _OTPpageState extends State<OTPpage> {
               ),
               GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pushReplacement(
-                    CustomPageRoute(
-                      const HomePage(),
-                    ),
-                  );
+                  verifyOTP(context);
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),

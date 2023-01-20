@@ -2,10 +2,14 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inshop_app/Authentication/Loginpage.dart';
 import 'package:inshop_app/FetchFunctions/FetchSearchedData.dart';
+import 'package:inshop_app/FetchFunctions/saveState.dart';
+import 'package:inshop_app/pages/onboarding_page.dart';
 import 'package:inshop_app/pages/subPages/cartPage.dart';
 import 'package:inshop_app/pages/subPages/favPage.dart';
 import 'package:inshop_app/pages/subPages/profilePage.dart';
+import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
@@ -6051,8 +6055,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  
-
   Future getSearchResult() async {
     if (searchController.text.trim().isEmpty) {
       showSnackBar("Search field is empty", context);
@@ -6116,24 +6118,70 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 32),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
                             children: [
-                              Text(
-                                "Best Fortune",
-                                style: TextStyle(
-                                  color: Colors.purple[900],
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 28,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Best Fortune",
+                                    style: TextStyle(
+                                      color: Colors.purple[900],
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28,
+                                    ),
+                                  ),
+                                  Text(
+                                    "Perfect prise",
+                                    style: TextStyle(
+                                      color: Colors.purple[900],
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Spacer(),
+                              InkWell(
+                                onTap: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        title: Text(
+                                            "Are you shure want to logout ?"),
+                                        actions: [
+                                          TextButton(
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text("No")),
+                                          TextButton(
+                                              onPressed: () async {
+                                                final lg = LoginState();
+                                                await lg.removeState();
+                                                Navigator.of(context)
+                                                    .pushAndRemoveUntil(
+                                                        CustomPageRoute(
+                                                            OnBoardingPage()),
+                                                        (route) => false);
+                                              },
+                                              child: Text("Yes")),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.logout,
+                                    color: Colors.red,
+                                  ),
                                 ),
                               ),
-                              Text(
-                                "Perfect prise",
-                                style: TextStyle(
-                                  color: Colors.purple[900],
-                                  fontSize: 20,
-                                ),
-                              ),
+                              SizedBox(
+                                width: screenDimentions.width * (40 / 428),
+                              )
                             ],
                           ),
                         ),
@@ -6255,7 +6303,7 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 setState(() {
                                   categoryIsSelected = 1;
-                                   itemsOnHomePage.clear();
+                                  itemsOnHomePage.clear();
                                   for (var item in phoneData["data"]) {
                                     itemsOnHomePage.add({
                                       'productAvtar':
@@ -6632,8 +6680,10 @@ class _ItemCardState extends State<ItemCard> {
                   fontSize: screenDimentions.width * (18 / 428),
                 ),
               ),
-              Text(widget.productProvider.length>24?
-                "by ${widget.productProvider.substring(0,24)}...":"by ${widget.productProvider}",
+              Text(
+                widget.productProvider.length > 24
+                    ? "by ${widget.productProvider.substring(0, 24)}..."
+                    : "by ${widget.productProvider}",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: screenDimentions.width * (12 / 428),
