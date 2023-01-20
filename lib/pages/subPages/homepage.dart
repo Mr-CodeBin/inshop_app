@@ -6035,6 +6035,7 @@ class _HomePageState extends State<HomePage> {
       },
     ]
   };
+  bool show = false;
   @override
   void initState() {
     // TODO: implement initState
@@ -6097,6 +6098,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var screenDimentions = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -6461,21 +6463,30 @@ class _HomePageState extends State<HomePage> {
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
                                           vertical: 8, horizontal: 28),
-                                      child: ItemCard(
-                                        productAvtar: itemsOnHomePage[index]
-                                            ["productAvtar"],
-                                        productCurrentPrice:
-                                            itemsOnHomePage[index]
-                                                ["productCurrentPrice"],
-                                        productDiscription:
-                                            itemsOnHomePage[index]
-                                                ["productDiscription"],
-                                        productName: itemsOnHomePage[index]
-                                            ["productName"],
-                                        productProvider: itemsOnHomePage[index]
-                                            ["productProvider"],
-                                        productRealPrice: itemsOnHomePage[index]
-                                            ["productRealPrice"],
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          setState(() {
+                                            show = !show;
+                                          });
+                                        },
+                                        child: ItemCard(
+                                          productAvtar: itemsOnHomePage[index]
+                                              ["productAvtar"],
+                                          productCurrentPrice:
+                                              itemsOnHomePage[index]
+                                                  ["productCurrentPrice"],
+                                          productDiscription:
+                                              itemsOnHomePage[index]
+                                                  ["productDiscription"],
+                                          productName: itemsOnHomePage[index]
+                                              ["productName"],
+                                          productProvider:
+                                              itemsOnHomePage[index]
+                                                  ["productProvider"],
+                                          productRealPrice:
+                                              itemsOnHomePage[index]
+                                                  ["productRealPrice"],
+                                        ),
                                       ),
                                     );
                                   },
@@ -6565,6 +6576,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
+            // Center(
+            //   child: AnimatedContainer(
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(24),
+            //       boxShadow: [
+            //         BoxShadow(
+            //             color: Colors.grey, blurRadius: 4, spreadRadius: 2),
+            //       ],
+            //       color: Colors.white,
+            //     ),
+            //     width: show ? 200 : 0,
+            //     height: show ? 200 : 0,
+            //     curve: Curves.fastLinearToSlowEaseIn,
+            //     duration: Duration(seconds: 1),
+            //     child: Center(child: Text("Item Details here")),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -6597,153 +6625,184 @@ class _ItemCardState extends State<ItemCard> {
   @override
   Widget build(BuildContext context) {
     var screenDimentions = MediaQuery.of(context).size;
-    return Container(
-      width: screenDimentions.width,
-      height: screenDimentions.height * (184 / 926),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius:
-            BorderRadius.circular(screenDimentions.width * (36 / 428)),
-        boxShadow: const [
-          BoxShadow(
-            color: Color.fromARGB(59, 158, 158, 158),
-            blurRadius: 0.5,
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(4),
-            child: Container(
-              width: screenDimentions.width * (160 / 428),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey),
-                borderRadius:
-                    BorderRadius.circular(screenDimentions.width * (36 / 428)),
-              ),
-              child: Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      width: screenDimentions.width * (160 / 428),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                            screenDimentions.width * (36 / 428)),
-                        child: Padding(
-                          padding: EdgeInsets.all(
-                              screenDimentions.width * (12 / 428)),
-                          child: Image.network(widget.productAvtar),
-                        ),
-                      ),
-                    ),
-                    Column(
+    return Column(
+      children: [
+        Container(
+          width: screenDimentions.width,
+          height: screenDimentions.height * (184 / 926),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius:
+                BorderRadius.circular(screenDimentions.width * (36 / 428)),
+            boxShadow: const [
+              BoxShadow(
+                color: Color.fromARGB(59, 158, 158, 158),
+                blurRadius: 0.5,
+              )
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Container(
+                  width: screenDimentions.width * (160 / 428),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(
+                        screenDimentions.width * (36 / 428)),
+                  ),
+                  child: Center(
+                    child: Stack(
                       children: [
-                        SizedBox(
-                          height: screenDimentions.height * (8 / 926),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              left: screenDimentions.width * (8 / 428)),
-                          child: Container(
-                            padding: EdgeInsets.all(4),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(100),
-                                color: Colors.white),
-                            child: Lottie.network(
-                                "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
-                                width: 32,
-                                animate: false),
+                        Container(
+                          width: screenDimentions.width * (160 / 428),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(
+                                screenDimentions.width * (36 / 428)),
+                            child: Padding(
+                              padding: EdgeInsets.all(
+                                  screenDimentions.width * (12 / 428)),
+                              child: Image.network(widget.productAvtar),
+                            ),
                           ),
+                        ),
+                        Column(
+                          children: [
+                            SizedBox(
+                              height: screenDimentions.height * (8 / 926),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  left: screenDimentions.width * (8 / 428)),
+                              child: Container(
+                                padding: EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(100),
+                                    color: Colors.white),
+                                child: Lottie.network(
+                                    "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
+                                    width: 32,
+                                    animate: false),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          SizedBox(
-            width: screenDimentions.width * (8 / 428),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Spacer(),
-              Text(
-                widget.productName.length > 14
-                    ? widget.productName.substring(0, 14) + "..."
-                    : widget.productName,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenDimentions.width * (18 / 428),
-                ),
-              ),
-              Text(
-                widget.productProvider.length > 24
-                    ? "by ${widget.productProvider.substring(0, 24)}..."
-                    : "by ${widget.productProvider}",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: screenDimentions.width * (12 / 428),
-                  color: Colors.grey,
-                ),
-              ),
-              const Spacer(),
-              Text(
-                widget.productDiscription.length > 20
-                    ? widget.productDiscription.substring(0, 20) + "..."
-                    : widget.productDiscription,
-                style: TextStyle(
-                  // fontWeight: FontWeight.bold,
-                  fontSize: screenDimentions.width * (12 / 428),
-                  color: Colors.grey,
-                ),
-              ),
-              const Spacer(),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    width: 4,
                   ),
+                ),
+              ),
+              SizedBox(
+                width: screenDimentions.width * (8 / 428),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Spacer(),
                   Text(
-                    widget.productCurrentPrice,
+                    widget.productName.length > 14
+                        ? widget.productName.substring(0, 14) + "..."
+                        : widget.productName,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: screenDimentions.width * (16 / 428),
-                      color: Colors.black,
+                      fontSize: screenDimentions.width * (18 / 428),
                     ),
                   ),
-                  SizedBox(
-                    width: screenDimentions.width * (16 / 428),
+                  Text(
+                    widget.productProvider.length > 24
+                        ? "by ${widget.productProvider.substring(0, 24)}..."
+                        : "by ${widget.productProvider}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: screenDimentions.width * (12 / 428),
+                      color: Colors.grey,
+                    ),
                   ),
-                  GestureDetector(
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.purple[900],
-                        borderRadius: BorderRadius.circular(12),
+                  const Spacer(),
+                  Text(
+                    widget.productDiscription.length > 20
+                        ? widget.productDiscription.substring(0, 20) + "..."
+                        : widget.productDiscription,
+                    style: TextStyle(
+                      // fontWeight: FontWeight.bold,
+                      fontSize: screenDimentions.width * (12 / 428),
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        width: 4,
                       ),
-                      child: Text(
-                        "Buy",
+                      Text(
+                        widget.productCurrentPrice,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: screenDimentions.width * (18 / 428),
-                          color: Colors.white,
+                          fontSize: screenDimentions.width * (16 / 428),
+                          color: Colors.black,
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: screenDimentions.width * (16 / 428),
+                      ),
+                      GestureDetector(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: Colors.purple[900],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            "Buy",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: screenDimentions.width * (18 / 428),
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  Spacer(),
                 ],
-              ),
-              Spacer(),
+              )
             ],
-          )
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ItemDetailsView extends StatefulWidget {
+  bool show;
+  ItemDetailsView({super.key, required this.show});
+
+  @override
+  State<ItemDetailsView> createState() => _ItemDetailsViewState();
+}
+
+class _ItemDetailsViewState extends State<ItemDetailsView> {
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(color: Colors.grey, blurRadius: 4, spreadRadius: 2),
         ],
+        color: Colors.white,
       ),
+      width: widget.show ? MediaQuery.of(context).size.width : 0,
+      height: widget.show ? MediaQuery.of(context).size.height : 0,
+      duration: Duration(microseconds: 800),
+      child: Center(child: Text("Item Details here")),
     );
   }
 }
