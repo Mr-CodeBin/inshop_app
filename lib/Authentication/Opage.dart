@@ -7,8 +7,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/Loginpage.dart';
+import 'package:inshop_app/Authentication/MoreDetails.dart';
 import 'package:inshop_app/FetchFunctions/saveState.dart';
+import 'package:inshop_app/model/UserModel.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
+import 'package:inshop_app/pages/subPages/profilePage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
@@ -30,10 +33,10 @@ class _OTPpageState extends State<OTPpage> {
           verificationId: LoginPageScreen.verify, smsCode: code);
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
-      LoginState loginstate = LoginState(phoneNo: LoginPageScreen.phone);
+      LoginState loginstate = LoginState(phoneNo: LoginPageScreen.phone, );
       log( await loginstate.saveLogin()? "Done":"Exception");
-
-      Navigator.of(context).push(CustomPageRoute(const HomePage()));
+      ProfileScreen.CurrentUserModel = UserModel(phoneNo: LoginPageScreen.phone);
+      Navigator.of(context).push(CustomPageRoute(ProfileScreen.CurrentUserModel.fullName !=null? const HomePage():const MoreDetailsScreen()));
     } catch (e) {
       log(e.toString());
       showSnackBar("Incorrect OTP", context);

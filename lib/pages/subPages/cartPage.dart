@@ -57,8 +57,7 @@ class _CartPageScreenState extends State<CartPageScreen> {
         elevation: 0,
         // leadingWidth: 40,
         leading: GestureDetector(
-          onTap: () => Navigator.of(context)
-              .pushReplacement(CustomPageRoute(itemPage())),
+          onTap: (){},
           child: Icon(
             Icons.arrow_back_ios,
             color: Colors.black,

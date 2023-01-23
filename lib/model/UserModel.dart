@@ -1,13 +1,15 @@
-import 'dart:js_util';
+import 'dart:convert';
 
 class UserModel {
-  String fullName;
+  String? fullName;
   String? email;
   String phoneNo;
+  List? saved = [];
   UserModel({
-    required this.fullName,
+    this.fullName,
     this.email,
     required this.phoneNo,
+    this.saved,
   });
 
   toJson() {
@@ -15,6 +17,7 @@ class UserModel {
       "FullName": fullName,
       "Email": email,
       "Phone": phoneNo,
+      "saved": {"data": saved}
     };
   }
 }

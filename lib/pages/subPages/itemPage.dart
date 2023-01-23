@@ -1,5 +1,8 @@
 // ignore_for_file: camel_case_types
 
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/button.dart';
@@ -10,14 +13,15 @@ import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-class itemPage extends StatefulWidget {
-  const itemPage({super.key});
+class itemPageScreen extends StatefulWidget {
+  Map<String, dynamic> itemdata;
+  itemPageScreen({super.key, required this.itemdata});
 
   @override
-  State<itemPage> createState() => _itemPageState();
+  State<itemPageScreen> createState() => _itemPageScreenState();
 }
 
-class _itemPageState extends State<itemPage> {
+class _itemPageScreenState extends State<itemPageScreen> {
   final imgList = [
     'https://m.media-amazon.com/images/I/61rrisp8qiL._SX679_.jpg',
     'https://m.media-amazon.com/images/I/81HXViH8boL._SX679_.jpg',
@@ -26,8 +30,44 @@ class _itemPageState extends State<itemPage> {
     'https://m.media-amazon.com/images/I/7161nwSVX9L._SX679_.jpg',
     'https://m.media-amazon.com/images/I/61+h6PKyeUL._SX679_.jpg'
   ];
+  final db = FirebaseFirestore.instance;
   final CarouselController carouselController = CarouselController();
   int currentIndex = 0;
+  List<Widget> SpecificaionList = [];
+  parseData() async {
+    imgList.clear();
+    for (var item in widget.itemdata['product_photos']) {
+      imgList.add(item);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    log(widget.itemdata.toString());
+    if (widget.itemdata["product_attributes"] != null) {
+      for (int i = 0;
+          i < widget.itemdata["product_attributes"].keys.length;
+          i++) {
+        log("${widget.itemdata["product_attributes"].keys.toList()[i]}   ${widget.itemdata["product_attributes"].values.toList()[i]}");
+        SpecificaionList.add(Row(
+          children: [
+            Text(
+              "${widget.itemdata["product_attributes"].keys.toList()[i]}   ${widget.itemdata["product_attributes"].values.toList()[i]}",
+              style: GoogleFonts.saira(
+                color: Colors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ));
+      }
+    }
+
+    parseData();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +79,7 @@ class _itemPageState extends State<itemPage> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         flexibleSpace: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20)),
@@ -50,8 +90,8 @@ class _itemPageState extends State<itemPage> {
           ),
         ),
         leading: GestureDetector(
-          onTap: () => Navigator.of(context).push(CustomPageRoute(HomePage())),
-          child: Icon(
+          onTap: () => Navigator.of(context).pop(),
+          child: const Icon(
             Icons.arrow_back_ios,
             color: Colors.black,
           ),
@@ -92,10 +132,10 @@ class _itemPageState extends State<itemPage> {
                                   final imgListt = imgList[index];
                                   return Container(
                                     margin: EdgeInsets.fromLTRB(12, 10, 12, 0),
-                                    color: Colors.grey,
+                                    color: Colors.transparent,
                                     child: Image.network(
                                       imgListt,
-                                      fit: BoxFit.cover,
+                                      fit: BoxFit.fitWidth,
                                     ),
                                   );
                                 },
@@ -163,31 +203,95 @@ class _itemPageState extends State<itemPage> {
                   ),
                   child: Column(
                     children: [
+                      Text(
+                        '${widget.itemdata["product_title"].toString()} (${widget.itemdata["offer"]["product_condition"].toString()})',
+                        style: GoogleFonts.saira(
+                          color: Colors.black,
+                          fontSize: 24,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                       Row(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "iPhone 13 pro Max",
-                                style: GoogleFonts.saira(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              Text(
-                                "By Amazon",
-                                style: GoogleFonts.saira(
-                                  color: Colors.black,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ],
-                          )
+                          Text(
+                            'By ${widget.itemdata["offer"]["store_name"].toString()}',
+                            style: GoogleFonts.saira(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                         ],
                       ),
+                      widget.itemdata["offer"]["store_rating"] != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Rating ${widget.itemdata["offer"]["store_rating"].toString()}',
+                                  style: GoogleFonts.saira(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      widget.itemdata["typical_price_range"] != null
+                          ? Row(
+                              children: [
+                                Text(
+                                  'Price Range ${widget.itemdata["typical_price_range"][0].toString()} - ${widget.itemdata["typical_price_range"][1].toString()}',
+                                  style: GoogleFonts.saira(
+                                    color: Colors.black,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Container(),
+                      Row(
+                        children: [
+                          Text(
+                            'Current price ${widget.itemdata["offer"]["price"].toString()}',
+                            style: GoogleFonts.saira(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Divider(
+                        thickness: 1,
+                        color: Colors.black,
+                        // indent: 6,
+                        // endIndent: 20,
+                      ),
+                      widget.itemdata["product_attributes"] != null
+                          ? Container(
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                "Specifications :",
+                                style: GoogleFonts.saira(
+                                  color: Colors.black,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            )
+                          : Container(),
+                      //main description container
+                      widget.itemdata["product_attributes"] != null
+                          ? Container(
+                            height: SpecificaionList.length * 24,
+                            child: ListView(
+                                children: SpecificaionList,
+                                physics: NeverScrollableScrollPhysics(),
+                              ),
+                          )
+                          : Container(),
                       Divider(
                         thickness: 1,
                         color: Colors.black,
@@ -210,8 +314,7 @@ class _itemPageState extends State<itemPage> {
                       Container(
                         alignment: Alignment.topLeft,
                         child: AutoSizeText(
-                          '''15 cm (6.1-inch) Super Retina XDR display with ProMotion for a faster,\nmore responsive feel\nCinematic mode adds shallow depth of field and shifts focus automatically in your videos\nPro camera system with new 12MP Telephoto, Wide and Ultra Wide cameras;\nLiDAR Scanner; 6x optical zoom range; macro photography; Photographic Styles,\nProRes video, Smart HDR 4, Night mode, Apple ProRAW, 4K Dolby Vision HDR recording\n12MP TrueDepth front camera with Night mode, 4K Dolby Vision HDR recording\nA15 Bionic chip for lightning-fast performance\n''' *
-                              10,
+                          widget.itemdata["product_description"].toString(),
                           minFontSize: 12,
                           maxLines: 100,
                           overflow: TextOverflow.ellipsis,

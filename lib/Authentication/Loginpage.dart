@@ -18,8 +18,11 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends State<LoginPageScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController phoneNumbeControllerr = TextEditingController();
-
+  bool isLoading = false;
   sendOtp(BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
     if (phoneNumbeControllerr.text.trim().isEmpty) {
       showSnackBar("Chutiya ho kya?", context);
       return;
@@ -31,6 +34,9 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          isLoading = false;
+        });
         LoginPageScreen.verify = verificationId;
         Navigator.of(context).push(CustomPageRoute(OTPpage()));
       },
@@ -136,14 +142,16 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                    child: Text(
-                      "Continue",
-                      style: GoogleFonts.saira(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator()
+                        : Text(
+                            "Continue",
+                            style: GoogleFonts.saira(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
                 ),
               ),

@@ -1,12 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inshop_app/model/UserModel.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
-
+  static UserModel CurrentUserModel = UserModel(phoneNo: "");
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -121,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Icon(Icons.verified_user_outlined),
                 Text(
-                  "Name",
+                  ProfileScreen.CurrentUserModel.fullName!.toString(),
                   style: GoogleFonts.saira(
                     color: Colors.black,
                     fontSize: 18,
@@ -161,7 +162,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Icon(Icons.verified_user_outlined),
                 Text(
-                  "Phone Number",
+                  ProfileScreen.CurrentUserModel.phoneNo,
                   style: GoogleFonts.saira(
                     color: Colors.black,
                     fontSize: 18,
@@ -200,7 +201,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 Icon(Icons.verified_user_outlined),
                 Text(
-                  "Name",
+                  ProfileScreen.CurrentUserModel.email!.toString(),
                   style: GoogleFonts.saira(
                     color: Colors.black,
                     fontSize: 18,

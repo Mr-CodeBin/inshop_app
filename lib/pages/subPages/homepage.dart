@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/Loginpage.dart';
@@ -8,6 +9,7 @@ import 'package:inshop_app/FetchFunctions/saveState.dart';
 import 'package:inshop_app/pages/onboarding_page.dart';
 import 'package:inshop_app/pages/subPages/cartPage.dart';
 import 'package:inshop_app/pages/subPages/favPage.dart';
+import 'package:inshop_app/pages/subPages/itemPage.dart';
 import 'package:inshop_app/pages/subPages/profilePage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
@@ -26,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   int categoryIsSelected = 0;
   int navBarSelection = 0;
   List itemsOnHomePage = [];
+  List fullData = [];
   bool noItemDisplay = false;
   bool isLoading = false;
   Map<String, dynamic> laptopData = {
@@ -6041,7 +6044,9 @@ class _HomePageState extends State<HomePage> {
     // TODO: implement initState
 
     itemsOnHomePage.clear();
+    fullData.clear();
     for (var item in all["data"]) {
+      fullData.add(item);
       itemsOnHomePage.add({
         'productAvtar': item["product_photos"].length != 0
             ? item["product_photos"][0]
@@ -6054,6 +6059,18 @@ class _HomePageState extends State<HomePage> {
       });
     }
     super.initState();
+  }
+
+  getUserData() async {
+    final _db = FirebaseFirestore.instance;
+    // await _db.collection("+912341234145").doc("Profile1").set({
+    //   "Name1": "Aviral1",
+    //   "Email1": "yaviral17@gmail.com1",
+    //   "Phone1": "+9123412341231"
+    // });
+    await _db.collection("+912341234144").doc("Profile").get().then((event) {
+      log("${event.id}   ${event.data()!["Name"].toString()}");
+    });
   }
 
   Future getSearchResult() async {
@@ -6069,7 +6086,9 @@ class _HomePageState extends State<HomePage> {
     log("everything file herer");
     if (response["isSuccess"] == true) {
       itemsOnHomePage.clear();
+      fullData.clear();
       for (var item in response["data"]) {
+        fullData.add(item);
         itemsOnHomePage.add({
           'productAvtar': item["product_photos"].length != 0
               ? item["product_photos"][0]
@@ -6079,6 +6098,7 @@ class _HomePageState extends State<HomePage> {
           'productName': item["product_title"].toString(),
           'productProvider': item["offer"]["store_name"].toString(),
           'productRealPrice': item["offer"]["original_price"].toString(),
+          'allData': item
         });
       }
       setState(() {
@@ -6159,8 +6179,7 @@ class _HomePageState extends State<HomePage> {
                                               child: Text("No")),
                                           TextButton(
                                               onPressed: () async {
-                                                final lg = LoginState();
-                                                await lg.removeState();
+                                                await LoginState.removeState();
                                                 Navigator.of(context)
                                                     .pushAndRemoveUntil(
                                                         CustomPageRoute(
@@ -6233,16 +6252,21 @@ class _HomePageState extends State<HomePage> {
                             SizedBox(
                               width: screenDimentions.width * (16 / 428),
                             ),
-                            Container(
-                              padding: EdgeInsets.all(8),
-                              width: screenDimentions.width * (52 / 428),
-                              height: 52,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(16)),
-                              child: Lottie.network(
-                                "https://assets5.lottiefiles.com/packages/lf20_kafcqme6.json",
-                                animate: false,
+                            GestureDetector(
+                              onTap: () async {
+                                await getUserData();
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(8),
+                                width: screenDimentions.width * (52 / 428),
+                                height: 52,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Lottie.network(
+                                  "https://assets5.lottiefiles.com/packages/lf20_kafcqme6.json",
+                                  animate: false,
+                                ),
                               ),
                             ),
                           ],
@@ -6258,7 +6282,9 @@ class _HomePageState extends State<HomePage> {
                                 setState(() {
                                   categoryIsSelected = 0;
                                   itemsOnHomePage.clear();
+                                  fullData.clear();
                                   for (var item in all["data"]) {
+                                    fullData.add(item);
                                     itemsOnHomePage.add({
                                       'productAvtar':
                                           item["product_photos"].length != 0
@@ -6306,7 +6332,9 @@ class _HomePageState extends State<HomePage> {
                                 setState(() {
                                   categoryIsSelected = 1;
                                   itemsOnHomePage.clear();
+                                  fullData.clear();
                                   for (var item in phoneData["data"]) {
+                                    fullData.add(item);
                                     itemsOnHomePage.add({
                                       'productAvtar':
                                           item["product_photos"].length != 0
@@ -6354,7 +6382,10 @@ class _HomePageState extends State<HomePage> {
                                 setState(() {
                                   categoryIsSelected = 2;
                                   itemsOnHomePage.clear();
+                                  fullData.clear();
                                   for (var item in laptopData["data"]) {
+                                    fullData.add(item);
+
                                     itemsOnHomePage.add({
                                       'productAvtar':
                                           item["product_photos"].length != 0
@@ -6402,7 +6433,9 @@ class _HomePageState extends State<HomePage> {
                                 setState(() {
                                   categoryIsSelected = 3;
                                   itemsOnHomePage.clear();
+                                  fullData.clear();
                                   for (var item in cameraData["data"]) {
+                                    fullData.add(item);
                                     itemsOnHomePage.add({
                                       'productAvtar':
                                           item["product_photos"].length != 0
@@ -6466,7 +6499,10 @@ class _HomePageState extends State<HomePage> {
                                       child: GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            show = !show;
+                                            Navigator.of(context).push(
+                                                CustomPageRoute(itemPageScreen(
+                                              itemdata: fullData[index],
+                                            )));
                                           });
                                         },
                                         child: ItemCard(
@@ -6525,19 +6561,6 @@ class _HomePageState extends State<HomePage> {
                             child: Icon(
                               Icons.home,
                               color: navBarSelection == 0
-                                  ? Colors.red
-                                  : Colors.white,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                navBarSelection = 1;
-                              });
-                            },
-                            child: Icon(
-                              Icons.card_travel,
-                              color: navBarSelection == 1
                                   ? Colors.red
                                   : Colors.white,
                             ),
@@ -6633,7 +6656,7 @@ class _ItemCardState extends State<ItemCard> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius:
-                BorderRadius.circular(screenDimentions.width * (36 / 428)),
+                BorderRadius.circular(screenDimentions.width * (16 / 428)),
             boxShadow: const [
               BoxShadow(
                 color: Color.fromARGB(59, 158, 158, 158),
@@ -6645,26 +6668,28 @@ class _ItemCardState extends State<ItemCard> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
                 child: Container(
-                  width: screenDimentions.width * (160 / 428),
+                  width: screenDimentions.width * (140 / 428),
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
                     borderRadius: BorderRadius.circular(
-                        screenDimentions.width * (36 / 428)),
+                        screenDimentions.width * (16 / 428)),
                   ),
                   child: Center(
                     child: Stack(
                       children: [
-                        Container(
-                          width: screenDimentions.width * (160 / 428),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(
-                                screenDimentions.width * (36 / 428)),
-                            child: Padding(
-                              padding: EdgeInsets.all(
-                                  screenDimentions.width * (12 / 428)),
-                              child: Image.network(widget.productAvtar),
+                        Center(
+                          child: SizedBox(
+                            width: screenDimentions.width * (160 / 428),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(
+                                  screenDimentions.width * (16 / 428)),
+                              child: Padding(
+                                padding: EdgeInsets.all(
+                                    screenDimentions.width * (12 / 428)),
+                                child: Image.network(widget.productAvtar),
+                              ),
                             ),
                           ),
                         ),
@@ -6672,20 +6697,6 @@ class _ItemCardState extends State<ItemCard> {
                           children: [
                             SizedBox(
                               height: screenDimentions.height * (8 / 926),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: screenDimentions.width * (8 / 428)),
-                              child: Container(
-                                padding: EdgeInsets.all(4),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    color: Colors.white),
-                                child: Lottie.network(
-                                    "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
-                                    width: 32,
-                                    animate: false),
-                              ),
                             ),
                           ],
                         ),
@@ -6732,42 +6743,55 @@ class _ItemCardState extends State<ItemCard> {
                     ),
                   ),
                   const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Text(
-                        widget.productCurrentPrice,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: screenDimentions.width * (16 / 428),
-                          color: Colors.black,
+                  Container(
+                    width: screenDimentions.width * (200 / 428),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          width: 4,
                         ),
-                      ),
-                      SizedBox(
-                        width: screenDimentions.width * (16 / 428),
-                      ),
-                      GestureDetector(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 12, vertical: 4),
-                          decoration: BoxDecoration(
-                            color: Colors.purple[900],
-                            borderRadius: BorderRadius.circular(12),
+                        Text(
+                          widget.productCurrentPrice,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: screenDimentions.width * (16 / 428),
+                            color: Colors.black,
                           ),
-                          child: Text(
-                            "Buy",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: screenDimentions.width * (18 / 428),
-                              color: Colors.white,
+                        ),
+                        SizedBox(
+                          width: screenDimentions.width * (16 / 428),
+                        ),
+                        Expanded(
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Spacer(),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: screenDimentions.width * (8 / 428)),
+                                  child: Container(
+                                    width: 40,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        color:
+                                            Color.fromARGB(255, 228, 228, 228)),
+                                    child: Lottie.network(
+                                        "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
+                                        width: 40,
+                                        repeat: true,
+                                        reverse: true,
+                                        animate: true),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Spacer(),
                 ],
@@ -6776,33 +6800,6 @@ class _ItemCardState extends State<ItemCard> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ItemDetailsView extends StatefulWidget {
-  bool show;
-  ItemDetailsView({super.key, required this.show});
-
-  @override
-  State<ItemDetailsView> createState() => _ItemDetailsViewState();
-}
-
-class _ItemDetailsViewState extends State<ItemDetailsView> {
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(color: Colors.grey, blurRadius: 4, spreadRadius: 2),
-        ],
-        color: Colors.white,
-      ),
-      width: widget.show ? MediaQuery.of(context).size.width : 0,
-      height: widget.show ? MediaQuery.of(context).size.height : 0,
-      duration: Duration(microseconds: 800),
-      child: Center(child: Text("Item Details here")),
     );
   }
 }
