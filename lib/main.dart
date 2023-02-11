@@ -27,7 +27,7 @@ void main() async {
   // bool checkState;
   runApp(MaterialApp(
     debugShowCheckedModeBanner: false,
-    home:  ProfileScreen.CurrentUserModel.phoneNo.trim().isNotEmpty
+    home: ProfileScreen.CurrentUserModel.phoneNo.trim().isNotEmpty
         ? ProfileScreen.CurrentUserModel.fullName!.isNotEmpty
             ? const HomePage()
             : const MoreDetailsScreen()

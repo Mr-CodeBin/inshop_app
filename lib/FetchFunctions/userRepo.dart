@@ -13,8 +13,9 @@ class UserRepo extends GetxController {
   final _db = FirebaseFirestore.instance;
   createUser(UserModel user, context) async {
     await _db
-        .collection(ProfileScreen.CurrentUserModel.phoneNo).
-        doc("Profile").set(user.toJson())
+        .collection(ProfileScreen.CurrentUserModel.phoneNo)
+        .doc("Profile")
+        .set(user.toJson())
         .whenComplete(() => {
               showSnackBar("Your account has been created ", context,
                   color: const Color.fromARGB(255, 101, 215, 105))
@@ -26,8 +27,6 @@ class UserRepo extends GetxController {
   }
 
   getUser(String phone, context) async {
-    
-
     var response = await _db.collection(phone).get();
     return response;
   }

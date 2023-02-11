@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/Loginpage.dart';
 import 'package:inshop_app/Authentication/MoreDetails.dart';
 import 'package:inshop_app/FetchFunctions/saveState.dart';
+import 'package:inshop_app/FetchFunctions/userRepo.dart';
 import 'package:inshop_app/model/UserModel.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/pages/subPages/profilePage.dart';
@@ -24,6 +26,7 @@ class OTPpage extends StatefulWidget {
 }
 
 class _OTPpageState extends State<OTPpage> {
+  var db = FirebaseFirestore.instance;
   String code = "";
   final FirebaseAuth auth = FirebaseAuth.instance;
   verifyOTP(BuildContext context) async {
@@ -33,10 +36,35 @@ class _OTPpageState extends State<OTPpage> {
           verificationId: LoginPageScreen.verify, smsCode: code);
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
-      LoginState loginstate = LoginState(phoneNo: LoginPageScreen.phone, );
-      log( await loginstate.saveLogin()? "Done":"Exception");
-      ProfileScreen.CurrentUserModel = UserModel(phoneNo: LoginPageScreen.phone);
-      Navigator.of(context).push(CustomPageRoute(ProfileScreen.CurrentUserModel.fullName !=null? const HomePage():const MoreDetailsScreen()));
+      final docRef = db.collection(LoginPageScreen.phone).doc("Profile");
+      docRef.get().then((DocumentSnapshot doc) {
+        final data = doc.data() as Map<String, dynamic>;
+        log(data.toString());
+        ProfileScreen.CurrentUserModel.fullName = data["FullName"];
+        ProfileScreen.CurrentUserModel.email = data["Email"];
+
+        LoginState tem = LoginState(
+            phoneNo: LoginPageScreen.phone,
+            email: data["Email"],
+            name: "FullName");
+        tem.saveLogin();
+        Navigator.of(context).pushReplacement(CustomPageRoute(HomePage()));
+        // ...
+      }, onError: (e) {
+        log("Error getting document: $e");
+        showSnackBar("Something went wrong", context);
+        Navigator.of(context).pop();
+      });
+      LoginState loginstate = LoginState(
+        phoneNo: LoginPageScreen.phone,
+      );
+      log(await loginstate.saveLogin() ? "Done" : "Exception");
+      ProfileScreen.CurrentUserModel =
+          UserModel(phoneNo: LoginPageScreen.phone);
+      Navigator.of(context).push(CustomPageRoute(
+          ProfileScreen.CurrentUserModel.fullName != null
+              ? const HomePage()
+              : const MoreDetailsScreen()));
     } catch (e) {
       log(e.toString());
       showSnackBar("Incorrect OTP", context);
@@ -80,7 +108,7 @@ class _OTPpageState extends State<OTPpage> {
                 //set to true to show as box or false to show as dash
                 showFieldAsBox: true,
                 //runs when a code is typed in
-                
+
                 onCodeChanged: (String value) {
                   code += value;
                 },

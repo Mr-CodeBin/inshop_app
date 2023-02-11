@@ -14,6 +14,7 @@ class IntroPage extends StatelessWidget {
     // ,\n${screenDimenstions.height}\n${screenDimenstions.width}
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -23,17 +24,9 @@ class IntroPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(40),
             child: Image.asset(
-              'images/inshopp_logo.png',
+              'images/appstore.png',
               height: 200,
               width: 200,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(24.0),
-            child: Text(
-              "Inshop App",
-              textAlign: TextAlign.center,
-              style: GoogleFonts.saira(fontSize: 30),
             ),
           ),
           Spacer(),

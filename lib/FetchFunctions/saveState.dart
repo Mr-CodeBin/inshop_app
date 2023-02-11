@@ -15,15 +15,15 @@ class LoginState {
       if (phoneNo != null) {
         sf.setString("phone", phoneNo);
         if (name != null) {
-           sf.setString("name", name!);
+          sf.setString("name", name!);
         }
         if (email != null) {
-           sf.setString("email", email!);
+          sf.setString("email", email!);
         }
+        return true;
       } else {
         return false;
       }
-      return true;
     } catch (e) {
       return false;
     }
