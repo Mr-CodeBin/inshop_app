@@ -26,6 +26,7 @@ class OTPpage extends StatefulWidget {
 }
 
 class _OTPpageState extends State<OTPpage> {
+  TextEditingController otpController = TextEditingController();
   var db = FirebaseFirestore.instance;
   String code = "";
   final FirebaseAuth auth = FirebaseAuth.instance;
@@ -33,7 +34,8 @@ class _OTPpageState extends State<OTPpage> {
     try {
       log("${LoginPageScreen.verify}  ${code}");
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: LoginPageScreen.verify, smsCode: code);
+          verificationId: LoginPageScreen.verify,
+          smsCode: otpController.text.trim());
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
       final docRef = db.collection(LoginPageScreen.phone).doc("Profile");
@@ -73,6 +75,7 @@ class _OTPpageState extends State<OTPpage> {
 
   @override
   Widget build(BuildContext context) {
+    var mediaQuery = MediaQuery.of(context).size;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -102,20 +105,32 @@ class _OTPpageState extends State<OTPpage> {
                   ),
                 ),
               ),
-              OtpTextField(
-                numberOfFields: 6,
-                borderColor: Color(0xFF512DA8),
-                //set to true to show as box or false to show as dash
-                showFieldAsBox: true,
-                //runs when a code is typed in
-
-                onCodeChanged: (String value) {
-                  code += value;
-                },
-                clearText: true,
-
-                //runs when every textfield is filled
-                onSubmit: (String verificationCode) {}, // end onSubmit
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                width: mediaQuery.width * (224 / 428),
+                height: 52,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.white,
+                ),
+                child: Center(
+                  child: TextField(
+                    maxLength: 6,
+                    keyboardType: TextInputType.number,
+                    inputFormatters: [
+                      FilteringTextInputFormatter.deny(
+                          RegExp(r"[a-z],[A-Z][.][,]"))
+                    ],
+                    decoration: InputDecoration(
+                        counterText: "",
+                        border: InputBorder.none,
+                        hintText: "Enter OTP"),
+                    style: GoogleFonts.poppins(
+                        fontSize: 20, fontWeight: FontWeight.w500),
+                    controller: otpController,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 10,
