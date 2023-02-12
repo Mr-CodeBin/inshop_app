@@ -8,20 +8,25 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/button.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:inshop_app/model/SavedItems.dart';
+import 'package:inshop_app/pages/subPages/favPage.dart';
 import 'package:inshop_app/pages/subPages/homepage.dart';
 import 'package:inshop_app/utils/pageRout.dart';
 import 'package:inshop_app/utils/snackBar.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class itemPageScreen extends StatefulWidget {
   Map<String, dynamic> itemdata;
-  itemPageScreen({super.key, required this.itemdata});
+  int? fromNavIndex;
+  itemPageScreen({super.key, required this.itemdata, this.fromNavIndex});
 
   @override
   State<itemPageScreen> createState() => _itemPageScreenState();
 }
 
 class _itemPageScreenState extends State<itemPageScreen> {
+  late bool isSaved = false;
   final imgList = [
     'https://m.media-amazon.com/images/I/61rrisp8qiL._SX679_.jpg',
     'https://m.media-amazon.com/images/I/81HXViH8boL._SX679_.jpg',
@@ -45,6 +50,11 @@ class _itemPageScreenState extends State<itemPageScreen> {
   void initState() {
     // TODO: implement initState
     log(widget.itemdata.toString());
+
+    UserSavedItems.userItems.contains(widget.itemdata)
+        ? isSaved = true
+        : isSaved = false;
+
     if (widget.itemdata["product_attributes"] != null) {
       for (int i = 0;
           i < widget.itemdata["product_attributes"].keys.length;
@@ -284,13 +294,11 @@ class _itemPageScreenState extends State<itemPageScreen> {
                           : Container(),
                       //main description container
                       widget.itemdata["product_attributes"] != null
-                          ? Container(
-                            height: SpecificaionList.length * 24,
-                            child: ListView(
-                                children: SpecificaionList,
-                                physics: NeverScrollableScrollPhysics(),
-                              ),
-                          )
+                          ? ListView(
+                              shrinkWrap: true,
+                              children: SpecificaionList,
+                              physics: NeverScrollableScrollPhysics(),
+                            )
                           : Container(),
                       Divider(
                         thickness: 1,
@@ -354,7 +362,7 @@ class _itemPageScreenState extends State<itemPageScreen> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       // minimumSize: Size(70, 20),
-                      backgroundColor: Colors.black,
+                      backgroundColor: isSaved ? Colors.red : Colors.black,
                       elevation: 2,
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(
@@ -362,12 +370,33 @@ class _itemPageScreenState extends State<itemPageScreen> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (isSaved) {
+                        await UserSavedItems.userItems.remove(widget.itemdata);
+                        await UserSavedItems.UploadUserItem();
+                        setState(() {
+                          isSaved = false;
+                        });
+                        if (widget.fromNavIndex == 2) {
+                          Navigator.of(context)
+                              .pushReplacement(CustomPageRoute(HomePage(
+                            navSelection: 2,
+                          )));
+                        }
+                        return;
+                      }
+
+                      UserSavedItems.userItems.add(widget.itemdata);
+                      await UserSavedItems.UploadUserItem();
+                      setState(() {
+                        isSaved = true;
+                      });
+                    },
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 8, horizontal: 28),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 8, horizontal: isSaved ? 12 : 28),
                       child: Text(
-                        "Add to cart",
+                        isSaved ? "Remove from Saved" : "Save for later",
                         style: GoogleFonts.saira(
                             fontSize: 16,
                             color: Colors.white,
@@ -386,7 +415,10 @@ class _itemPageScreenState extends State<itemPageScreen> {
                         ),
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () async {
+                      var url = Uri.parse(widget.itemdata["product_page_url"]);
+                      await launchUrl(url);
+                    },
                     child: Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 8, horizontal: 38),

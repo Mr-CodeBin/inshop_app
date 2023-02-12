@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/Loginpage.dart';
 import 'package:inshop_app/FetchFunctions/FetchSearchedData.dart';
 import 'package:inshop_app/FetchFunctions/saveState.dart';
+import 'package:inshop_app/model/SavedItems.dart';
 import 'package:inshop_app/pages/onboarding_page.dart';
 import 'package:inshop_app/pages/subPages/cartPage.dart';
 import 'package:inshop_app/pages/subPages/favPage.dart';
@@ -16,7 +17,8 @@ import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  int? navSelection;
+  HomePage({super.key, this.navSelection});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -6042,7 +6044,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     // TODO: implement initState
-
+    UserSavedItems.GetUserItem();
+    widget.navSelection != null ? navBarSelection = widget.navSelection! : null;
     itemsOnHomePage.clear();
     fullData.clear();
     for (var item in all["data"]) {
@@ -6253,8 +6256,9 @@ class _HomePageState extends State<HomePage> {
                               width: screenDimentions.width * (16 / 428),
                             ),
                             GestureDetector(
-                              onTap: () async {
-                                await getUserData();
+                              onTap: () {
+                                UserSavedItems.GetUserItem();
+                                // UserSavedItems.UploadUserItem();
                               },
                               child: Container(
                                 padding: EdgeInsets.all(8),
@@ -6644,7 +6648,14 @@ class ItemCard extends StatefulWidget {
   State<ItemCard> createState() => _ItemCardState();
 }
 
-class _ItemCardState extends State<ItemCard> {
+class _ItemCardState extends State<ItemCard>
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenDimentions = MediaQuery.of(context).size;
@@ -6761,34 +6772,6 @@ class _ItemCardState extends State<ItemCard> {
                         ),
                         SizedBox(
                           width: screenDimentions.width * (16 / 428),
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Spacer(),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: screenDimentions.width * (8 / 428)),
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        color:
-                                            Color.fromARGB(255, 228, 228, 228)),
-                                    child: Lottie.network(
-                                        "https://assets4.lottiefiles.com/private_files/lf30_pbo6eiyy.json",
-                                        width: 40,
-                                        repeat: true,
-                                        reverse: true,
-                                        animate: true),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
                       ],
                     ),

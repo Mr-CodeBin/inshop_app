@@ -29,7 +29,7 @@ void main() async {
     debugShowCheckedModeBanner: false,
     home: ProfileScreen.CurrentUserModel.phoneNo.trim().isNotEmpty
         ? ProfileScreen.CurrentUserModel.fullName!.isNotEmpty
-            ? const HomePage()
+            ? HomePage()
             : const MoreDetailsScreen()
         : IntroPage(),
   ));

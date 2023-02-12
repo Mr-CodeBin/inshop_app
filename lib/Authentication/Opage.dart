@@ -32,41 +32,48 @@ class _OTPpageState extends State<OTPpage> {
   final FirebaseAuth auth = FirebaseAuth.instance;
   verifyOTP(BuildContext context) async {
     try {
-      log("${LoginPageScreen.verify}  ${code}");
+      log("${LoginPageScreen.verify}  ${otpController.text.trim()}");
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: LoginPageScreen.verify,
           smsCode: otpController.text.trim());
       // Sign the user in (or link) with the credential
       await auth.signInWithCredential(credential);
-      final docRef = db.collection(LoginPageScreen.phone).doc("Profile");
-      docRef.get().then((DocumentSnapshot doc) {
-        final data = doc.data() as Map<String, dynamic>;
-        log(data.toString());
-        ProfileScreen.CurrentUserModel.fullName = data["FullName"];
-        ProfileScreen.CurrentUserModel.email = data["Email"];
+      await db.collection(LoginPageScreen.phone).doc("Profile").get().then(
+          (DocumentSnapshot doc) async {
+        if (doc.data() != null) {
+          final data = await doc.data() as Map<String, dynamic>;
+          log(data.toString());
 
-        LoginState tem = LoginState(
+          ProfileScreen.CurrentUserModel.fullName = data["FullName"];
+          ProfileScreen.CurrentUserModel.email = data["Email"];
+
+          LoginState tem = LoginState(
+              phoneNo: LoginPageScreen.phone,
+              email: data["Email"],
+              name: data["FullName"]);
+          tem.saveLogin();
+          Navigator.of(context).push(CustomPageRoute(
+              ProfileScreen.CurrentUserModel.fullName != null
+                  ? HomePage()
+                  : const MoreDetailsScreen()));
+        } else {
+          LoginState loginstate = LoginState(
             phoneNo: LoginPageScreen.phone,
-            email: data["Email"],
-            name: "FullName");
-        tem.saveLogin();
-        Navigator.of(context).pushReplacement(CustomPageRoute(HomePage()));
+          );
+          log(await loginstate.saveLogin() ? "Done" : "Exception");
+          ProfileScreen.CurrentUserModel =
+              UserModel(phoneNo: LoginPageScreen.phone);
+          Navigator.of(context).push(CustomPageRoute(
+              ProfileScreen.CurrentUserModel.fullName != null
+                  ? HomePage()
+                  : const MoreDetailsScreen()));
+        }
         // ...
       }, onError: (e) {
         log("Error getting document: $e");
         showSnackBar("Something went wrong", context);
         Navigator.of(context).pop();
       });
-      LoginState loginstate = LoginState(
-        phoneNo: LoginPageScreen.phone,
-      );
-      log(await loginstate.saveLogin() ? "Done" : "Exception");
-      ProfileScreen.CurrentUserModel =
-          UserModel(phoneNo: LoginPageScreen.phone);
-      Navigator.of(context).push(CustomPageRoute(
-          ProfileScreen.CurrentUserModel.fullName != null
-              ? const HomePage()
-              : const MoreDetailsScreen()));
     } catch (e) {
       log(e.toString());
       showSnackBar("Incorrect OTP", context);
@@ -81,8 +88,9 @@ class _OTPpageState extends State<OTPpage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Lottie.network(
-                "https://assets6.lottiefiles.com/packages/lf20_fkdiqhnw.json",
+              Lottie.asset(
+                "images/otpPageAnimation.json",
+                repeat: false,
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(10, 8, 20, 0),

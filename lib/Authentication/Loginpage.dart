@@ -58,8 +58,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Lottie.network(
-                  "https://assets2.lottiefiles.com/packages/lf20_9evakyqx.json",
+                child: Lottie.asset(
+                  "images/loginPageAnimation.json",
                   animate: true,
                 ),
               ),
@@ -73,6 +73,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   controller: phoneNumbeControllerr,
                   obscureText: false,
                   maxLength: 10,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
