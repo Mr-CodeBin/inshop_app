@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inshop_app/Authentication/BlankPage.dart';
 import 'package:inshop_app/Authentication/Opage.dart';
+import 'package:inshop_app/utils/pageRout.dart';
+import 'package:inshop_app/utils/snackBar.dart';
 import 'package:lottie/lottie.dart';
 
 class LoginPageScreen extends StatefulWidget {
   const LoginPageScreen({super.key});
   static String verify = "";
+  static String phone = "";
   @override
   State<LoginPageScreen> createState() => _LoginPageScreenState();
 }
@@ -15,19 +18,27 @@ class LoginPageScreen extends StatefulWidget {
 class _LoginPageScreenState extends State<LoginPageScreen> {
   FirebaseAuth auth = FirebaseAuth.instance;
   TextEditingController phoneNumbeControllerr = TextEditingController();
-
-  sendOtp() async {
+  bool isLoading = false;
+  sendOtp(BuildContext context) async {
+    setState(() {
+      isLoading = true;
+    });
+    if (phoneNumbeControllerr.text.trim().isEmpty) {
+      showSnackBar("Chutiya ho kya?", context);
+      return;
+    }
+    LoginPageScreen.phone = "+91${phoneNumbeControllerr.text.trim()}";
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",
+      // phoneNumber: "+91${phoneNumbeControllerr.text.trim()}",
+      phoneNumber: "+911111111111",
       verificationCompleted: (PhoneAuthCredential credential) {},
       verificationFailed: (FirebaseAuthException e) {},
       codeSent: (String verificationId, int? resendToken) {
+        setState(() {
+          isLoading = false;
+        });
         LoginPageScreen.verify = verificationId;
-        Navigator.pushReplacement(context, MaterialPageRoute(
-          builder: (context) {
-            return OTPpage();
-          },
-        ));
+        Navigator.of(context).push(CustomPageRoute(OTPpage()));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
@@ -47,8 +58,8 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Lottie.network(
-                  "https://assets2.lottiefiles.com/packages/lf20_9evakyqx.json",
+                child: Lottie.asset(
+                  "images/loginPageAnimation.json",
                   animate: true,
                 ),
               ),
@@ -62,6 +73,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                   controller: phoneNumbeControllerr,
                   obscureText: false,
                   maxLength: 10,
+                  keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     enabledBorder: const OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.grey),
@@ -121,7 +133,7 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
 
               GestureDetector(
                 onTap: () async {
-                  await sendOtp();
+                  await sendOtp(context);
                 },
                 child: Container(
                   padding: EdgeInsets.all(10),
@@ -131,14 +143,16 @@ class _LoginPageScreenState extends State<LoginPageScreen> {
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Center(
-                    child: Text(
-                      "Continue",
-                      style: GoogleFonts.saira(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    child: isLoading
+                        ? CircularProgressIndicator()
+                        : Text(
+                            "Continue",
+                            style: GoogleFonts.saira(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
                   ),
                 ),
               ),
